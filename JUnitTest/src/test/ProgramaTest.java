@@ -53,7 +53,12 @@ public class ProgramaTest {
 	@Before
 	public void setUp() throws Exception {
 		System.out.println("ProgramaTest -> setUp");
+		Date d1 = new Date(2015,12,24,22,00);
+		Date d2 = new Date(2015,12,25,06,00);
 		
+		_defaultTarea 		 = new Tarea("Festejar Navidad");
+		_defaultProgramacion = new Programacion(d1,d2,_defaultTarea);
+		_defaultPrograma	 = new Programa();
 	}
 	/**
 	 * Metodo tearDown para instancias de test
@@ -76,6 +81,26 @@ public class ProgramaTest {
 	@Test
 	public void testGetCantOcurrencias() {
 		System.out.println("ProgramaTest -> testGetCantOcurrencias");
+		
+		_defaultPrograma.eliminarProgramaciones();
+		assertEquals(0, _defaultPrograma.getCantProgramaciones());
+		
+		_defaultPrograma.addProgramacion(_defaultProgramacion);
+		Date d1 = new Date(2016,1,23,00,00);
+		Date d2 = new Date(2016,1,23,23,59);
+		Date d3 = new Date(2016,1,06,00,00);
+		Date d4 = new Date(2016,1,06,06,00);
+		
+		Tarea t1	= new Tarea("Festejar Cumpleaños");
+		Tarea t2	= new Tarea("Cortar pasto para camellos");
+		
+		Programacion cumpleanios	= new Programacion(d1, d2,t1);
+		Programacion reyes			= new Programacion(d3, d4,t2);
+		
+		_defaultPrograma.addProgramacion(cumpleanios);
+		_defaultPrograma.addProgramacion(reyes);
+		
+		assertEquals(3, _defaultPrograma.getCantProgramaciones());
 	}
 	/**
 	 * Prueba el metodo getCantTareasEntre
@@ -96,6 +121,9 @@ public class ProgramaTest {
 	@Test
 	public void testAddProgramacion() {
 		System.out.println("ProgramaTest -> testAddProgramacion");
+		int programacionesHastaElMomento = _defaultPrograma.getCantProgramaciones();
+		_defaultPrograma.addProgramacion(_defaultProgramacion);
+		assertEquals(programacionesHastaElMomento+1,_defaultPrograma.getCantProgramaciones());
 	}
 
 	/**
@@ -108,25 +136,42 @@ public class ProgramaTest {
 	@Test
 	public void testRemoveProgramacion() throws ProgramacionNoEncontradaException {
 		System.out.println("ProgramaTest -> testRemoveProgramacion");
+		Date d1 = new Date(2015,12,31,22,00);
+		Date d2 = new Date(2016,1,1,06,00);
+		Tarea t	= new Tarea("Recibir año nuevo");
 		
+		Programacion otraProgramacion = new Programacion(d2, d2,t);
+		_defaultPrograma.addProgramacion(otraProgramacion);
+		int programacionesHastaElMomento = _defaultPrograma.getCantProgramaciones();
+		
+		_defaultPrograma.removeProgramacion(otraProgramacion);
+		assertEquals(programacionesHastaElMomento-1,_defaultPrograma.getCantProgramaciones());
 	}
+	
+	@Test(expected = ProgramacionNoEncontradaException.class)
+	public void testExcepcionPorNoEncontrada() throws ProgramacionNoEncontradaException{
+		_defaultPrograma.eliminarProgramaciones();
+		_defaultPrograma.removeProgramacion(_defaultProgramacion);
+	};
 	
 	@Test
 	public void testEliminarProgramaciones() {
 		System.out.println("ProgramaTest -> testEliminarProgramaciones");
+		_defaultPrograma.eliminarProgramaciones();
+		assertEquals(0,_defaultPrograma.getCantProgramaciones());
 	}
 
 	@Test
 	public void testProgramaVacio() {
 		System.out.println("ProgramaTest -> testProgramaVacio");
-
+		_defaultPrograma.eliminarProgramaciones();
+		assertEquals(true,_defaultPrograma.programaVacio());
 	}
 	
-	@Test
+	@Test(timeout=1)
 	public void testIniciar() throws InterruptedException {
-		
 		System.out.println("ProgramaTest -> testIniciar");
-		
+		_defaultPrograma.iniciar();
 	}
 	
 }
