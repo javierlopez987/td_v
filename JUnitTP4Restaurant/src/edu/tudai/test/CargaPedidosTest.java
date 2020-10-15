@@ -2,6 +2,9 @@ package edu.tudai.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,13 +21,12 @@ import edu.tudai.pojo.Producto;
 import edu.tudai.pojo.ProductoBasico;
 import edu.tudai.pojo.ProductoElaborado;
 import edu.tudai.pojo.Receta;
-import edu.tudai.pojo.SinSaldoException;
 import edu.tudai.pojo.Usuario;
 
 public class CargaPedidosTest {
 	private static Mostrador _defaultMostrador;
-	private static Pedido _defaultPedido;
 	private static Cocina _defaultCocina;
+	private static List<Pedido> _defaultPedidos;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -64,15 +66,21 @@ public class CargaPedidosTest {
 
 		_defaultMostrador = new Mostrador();
 		_defaultMostrador.setNombreOperador("Jose");
+		
 		Mostrador m2 = new Mostrador();
 		m2.setNombreOperador("Maria");
-
-		_defaultCocina = new Cocina();
-		_defaultCocina.start();
 
 		Pedido p = new Pedido();
 		p.setUsuario(u1);
 		p.agregarItem(new ItemPedido(1, p1));
+		
+		_defaultPedidos = new ArrayList<Pedido>();
+		_defaultPedidos.add(p);
+		
+		Cocina.setPedidos(_defaultPedidos);
+		
+		_defaultCocina = new Cocina();
+		_defaultCocina.start();
 		
 		Pedido q = new Pedido();
 		
@@ -110,14 +118,7 @@ public class CargaPedidosTest {
 		_defaultMostrador.agregarPedido(p);
 		m1.agregarPedido(q);
 		
-		_defaultMostrador.getCantidadPedidos();
-		m1.getCantidadPedidos();
-		
-		/*
-		 * _defaultCocina.setPedidos(pedidos);
-		 * 
-		 * assertEquals(cantPedidos, Mostrador.getCantidadPedidos());
-		 */
+		assertEquals(Mostrador.getCantidadPedidos(), Mostrador.getCantidadPedidos());
 	}
 	
 }
