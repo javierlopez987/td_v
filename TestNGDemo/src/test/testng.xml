@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Suite basico carga" verbose="1">
+	<!-- El siguiente parametro se pasa a todos los tests de la SUITE -->
+	<parameter name="tester-name" value="Javier" />
+	<test name="Probar la cuenta de ocurrencias">
+		<classes>
+			<class name="test.ProgramaTest">
+				<methods>
+					<include name="getCantOcurrencias" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Crear programaciones">
+		<!-- parametro solo para los tests -->
+		<parameter name="prog-count" value="10" />
+		<classes>
+			<class name="test.ProgramaTest">
+				<methods>
+					<include name="addMuchasProgramaciones" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+</suite>
